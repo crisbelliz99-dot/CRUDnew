@@ -84,7 +84,7 @@ app.post("/register", async (req, res) => {
                 
                 req.session.userId = this.lastID;
                 req.session.userEmail = email;
-                res.redirect("/tindex.html");
+                res.redirect("/index.html");
             }
         );
     } catch (error) {
