@@ -105,7 +105,7 @@ app.post("/login", (req, res) => {
 
         req.session.userId = user.id;
         req.session.userEmail = user.email;
-        res.redirect("/tindex.html");
+        res.redirect("/index.html");
     });
 });
 
@@ -194,7 +194,7 @@ app.post("/logout", (req, res) => {
     });
 });
 app.get("/", (req, res) => {
-    if (req.session.userId) return res.redirect("/tindex.html");
+    if (req.session.userId) return res.redirect("/index.html");
     res.redirect("/login.html");
 });
 
