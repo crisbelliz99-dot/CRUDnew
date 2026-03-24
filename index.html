@@ -196,12 +196,15 @@
             }
             
             tasksList.innerHTML = tasks.map(task => `
-                <div class="task-item ${task.completada ? 'completed' : ''}" data-id="${task.id}">
-                    <input type="checkbox" class="task-checkbox" ${task.completada ? 'checked' : ''} onchange="toggleTask(${task.id}, this.checked)">
-                    <span class="task-text">${task.texto}</span>
-                    <button class="delete-btn" onclick="deleteTask(${task.id})">Eliminar</button>
-                </div>
-            `).join('');
+              <div class="task-item ${task.completada ? 'completed' : ''}" data-id="${task.id}">
+                 <input type="checkbox" class="task-checkbox" ${task.completada ? 'checked' : ''} onchange="toggleTask(${task.id}, this.checked)">
+        
+                 <span class="task-text">${task.texto}</span>
+
+                 <button onclick="editTask(${task.id}, '${task.texto}')">Editar</button>
+                 <button class="delete-btn" onclick="deleteTask(${task.id})">Eliminar</button>
+              </div>
+          `).join('');
         }
 
         document.getElementById('addBtn').addEventListener('click', async () => {
@@ -296,6 +299,31 @@
                 console.error('Error eliminando tarea:', error);
                 showError('Error de conexión');
             }
+        };
+
+        window.editTask = async (id, textoActual) => {
+          let nuevo = prompt("Editar tarea:", textoActual);
+ 
+            if (!nuevo || nuevo.trim() === "") return;
+
+             try {
+                 const response = await fetch(`/tasks/${id}`, {
+                     method: 'PUT',
+                     headers: {
+                       'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ texto: nuevo.trim() })
+              });
+
+              if (response.ok) {
+                  loadTasks();
+              } else {
+                  showError('Error al editar la tarea');
+              }
+           } catch (error) {
+               console.error(error);
+               showError('Error de conexión');
+           }
         };
 
         document.getElementById('logoutBtn').addEventListener('click', async () => {
